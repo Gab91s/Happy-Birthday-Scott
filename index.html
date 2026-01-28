@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Scott!</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+  <div class="stage">
+    <div class="book" id="book" aria-label="Birthday card">
+      <div class="backboard"></div>
+
+      <!-- INSIDE SPREAD -->
+      <div class="inside" aria-hidden="false">
+        <div class="page" style="padding-right: 18px;">
+          <h2>HAPPY BIRTHDAY, SCOTT</h2>
+          <div class="message">
+            <p> You're the SpongeBob to my Patrick, the Courage to my Muriel, and the Cheese to my Burger.</p>
+            <p> You might feel like there have been setbacks and things have been hard, but all of that effort is going to keep being fruitful for you.</p>
+            <p> I hope you find excitement and joy in all of the great things coming this year! Spending more time making music, more time in nature, and more time building things you love.</p>
+          </div>
+          <div class="signature">With all my love ♥️ your wife Gabby</div>
+          <div class="signature" style="opacity:.75; margin-top: 6px; font-size:x-small">January 28, 2026</div>
+        </div>
+
+        <div class="cake-area">
+          <div class="cake-wrap">
+            <div class="candles" id="candles" aria-label="Candles"></div>
+
+            <div class="cake" aria-hidden="true">
+              <div class="sprinkles" aria-hidden="true"></div>
+              <div class="drips" aria-hidden="true"></div>
+            </div>
+            <div class="plate" aria-hidden="true"></div>
+          </div>
+
+          <div class="controls">
+            <button class="btn celebrate" id="celebrateBtn" type="button">*** CELEBRATE ***</button>
+
+            <button class="btn matchbox" id="resetBtn" type="button" title="Relight candles"
+                    style="background: rgba(109,91,208,0.25); color: rgba(247,215,116,0.95);
+                    border: 1px solid rgba(247,215,116,0.28);">
+              <span class="art">[matchbox] ──┐🔥</span>
+              <span class="spark" aria-hidden="true"></span>
+            </button>
+            <br><br>
+            <div class="note">*tap the cake to blow out candles*</div>
+
+          </div>
+        </div>
+
+        <div class="gutter" aria-hidden="true"></div>
+      </div>
+
+      <!-- FRONT COVER (OPENS LIKE A BOOK) -->
+      <div class="cover" id="cover" aria-hidden="false">
+        <div class="cover-face cover-front">
+          <div class="title">
+            <div class="big">HAPPY BIRTHDAY</div>
+            <span class="name">Scott!</span>
+            <div class="balloons" aria-hidden="true">
+              <div class="balloon"></div>
+              <div class="balloon"></div>
+              <div class="balloon"></div>
+              <div class="balloon"></div>
+              <div class="balloon"></div>
+            </div>
+            <div class="subline">tap a bottom corner to open</div>
+          </div>
+        </div>
+        <div class="cover-face cover-inside"></div>
+      </div>
+
+      <!-- Only these corners toggle open/close -->
+      <button class="corner left" id="cornerLeft" type="button" aria-label="Open/close card (left corner)"></button>
+      <button class="corner right" id="cornerRight" type="button" aria-label="Open/close card (right corner)"><img src="/heart.png"></button>
+    </div>
+  </div>
+
+  <!-- Placeholder audio -->
+<audio id="birthdaySong" src="happybirthday.mp3" preload="none" loop></audio>
+<audio id="catSoundA" src="meow.mp3" preload="none"></audio>
+<audio id="catSoundB" src="purr.mp3" preload="none"></audio>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

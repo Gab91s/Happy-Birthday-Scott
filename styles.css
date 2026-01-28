@@ -1,0 +1,619 @@
+/* ====== GLOBAL STYLES ====== */
+:root{
+  --sky: #6d5bd0;     /* soft purple/indigo */
+  --lemon: #f7d774;   /* warm gold */
+  --apricot: #f0a46b; /* amber accent */
+  --coral: #d86b6b;   /* muted warm red (tiny use) */
+
+  --ink: #070814;
+  --paper: #0b0c1f;
+  --border: rgba(247, 215, 116, 0.88);
+  --glow: rgba(247, 215, 116, 0.35);
+
+  --mono: "Consolas", "Courier New", ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", monospace;
+}
+
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+body{
+  font-family: var(--mono);
+  color: var(--lemon);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: hidden;
+
+  /* Base night sky (stars are a separate overlay) */
+  background:
+    radial-gradient(circle at 18% 12%, rgba(109,91,208,0.18), transparent 42%),
+    radial-gradient(circle at 82% 20%, rgba(247,215,116,0.10), transparent 46%),
+    radial-gradient(circle at 70% 84%, rgba(240,164,107,0.08), transparent 40%),
+    linear-gradient(180deg, #050514, #02020a);
+
+  position: relative;
+}
+
+/* ====== STARFIELD OVERLAY ====== */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;               /* behind the card */
+  opacity: 0;               /* off by default */
+  transition: opacity 300ms ease;
+
+  background:
+    radial-gradient(circle, rgba(247,215,116,0.95) 0 1px, transparent 2px) 0 0 / 240px 240px,
+    radial-gradient(circle, rgba(247,215,116,0.70) 0 1px, transparent 2px) 60px 90px / 320px 320px,
+    radial-gradient(circle, rgba(109,91,208,0.55) 0 1px, transparent 2px) 20px 40px / 420px 420px;
+
+  animation: starTwinkle 5.2s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+body.stars-on::before{ opacity: 0.75; }
+
+@keyframes starTwinkle{
+  0%, 100%{ filter: brightness(0.95); transform: translateY(0); }
+  50%{ filter: brightness(1.25); transform: translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body::before{ animation: none; }
+}
+
+    /* ====== BOOK CARD ====== */
+    .stage{
+      position: relative; z-index: 2;
+      width: min(760px, 100%);
+      perspective: 1400px;
+    }
+
+    .book{
+      position: relative;
+      width: 100%;
+      height: 520px;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.55));
+    }
+
+    /* spine/backboard */
+    .backboard{
+      position:absolute;
+      inset: 0;
+      border: 4px solid var(--border);
+      background:
+          linear-gradient(90deg, rgba(247,215,116,0.18), transparent 18%),
+          linear-gradient(180deg, rgba(109,91,208,0.14), rgba(7,8,20,0.92));
+      border-radius: 16px;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.35) inset, 0 0 28px var(--glow);
+      transform: translateZ(-2px);
+      overflow: hidden;
+    }
+
+ .inside{
+  position:absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background:
+    /* tiny paw/stars hints (very subtle) */
+    radial-gradient(circle at 14% 22%, rgba(247,215,116,0.08) 0 2px, transparent 3px),
+    radial-gradient(circle at 18% 26%, rgba(247,215,116,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 10% 26%, rgba(247,215,116,0.06) 0 1px, transparent 2px),
+
+    /* scanlines */
+    repeating-linear-gradient(
+      0deg,
+      rgba(247,215,116,0.05) 0px,
+      rgba(247,215,116,0.05) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+
+    /* inside “paper” */
+    linear-gradient(180deg, rgba(11,12,31,0.96), rgba(7,8,20,0.96));
+}
+
+.gutter{
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 10px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(247,215,116,0.08), rgba(0,0,0,0.55));
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+
+    /* front cover that swings open like a book */
+    .cover{
+      position:absolute;
+      inset: 0;
+      border-radius: 16px;
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      transition: transform 900ms cubic-bezier(.18,.8,.2,1);
+      cursor: default;
+    }
+
+    .cover-face{
+      position:absolute;
+      inset: 0;
+      border: 4px solid var(--border);
+      border-radius: 16px;
+      backface-visibility: hidden;
+      overflow: hidden;
+    }
+
+.cover-front{
+  background:
+    repeating-linear-gradient(90deg, rgba(240,164,107,0.16) 0 6px, transparent 6px 14px),
+    radial-gradient(circle at 42% 22%, rgba(247,215,116,0.34), transparent 48%),
+    linear-gradient(180deg, rgba(109,91,208,0.72), rgba(7,8,20,0.92));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 26px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.35) inset, 0 0 30px var(--glow);
+}
+
+.cover-inside{
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, rgba(7,8,20,0.92), rgba(11,12,31,0.96));
+}
+
+    .book.open .cover{
+      transform: rotateY(-150deg);
+    }
+
+    /* ====== COVER CONTENT ====== */
+    .title{
+      text-align:center;
+      letter-spacing: 0.05em;
+      line-height: 1.05;
+      text-shadow: 0 2px 0 rgba(0,0,0,0.5);
+    }
+
+    .title .big{
+      font-size: clamp(34px, 4.6vw, 52px);
+      color: var(--lemon);
+    }
+
+    .title .name{
+      display:block;
+      margin-top: 10px;
+      font-size: clamp(28px, 4.2vw, 48px);
+      color: var(--coral);
+    }
+
+    .subline{
+      margin-top: 14px;
+      font-size: 14px;
+      color: rgba(247,215,116,0.92);
+      opacity: 0.95;
+    }
+
+    .balloons{
+      display:flex;
+      gap: 12px;
+      margin-top: 18px;
+      justify-content:center;
+      flex-wrap: wrap;
+    }
+    .balloon{
+      width: 34px;
+      height: 48px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: relative;
+      animation: float 3.2s ease-in-out infinite;
+      box-shadow: -2px -3px 2px rgba(0,0,0,0.30) inset;
+      /* Add a glossy effect */
+  background: radial-gradient(circle at 30% 30%, #ffcccc, #ff4d4d);
+    }
+    .balloon::before {
+      content:"▲";
+      font-size:8px;
+      display:block;
+      text-align:center;
+      width:100%;
+      position:absolute;
+      bottom: -6px;
+      z-index:-100;
+    }
+    .balloon::after{
+      content:"";
+      position:absolute;
+      left: 50%;
+      bottom:-18px;
+      width: 2px;
+      height: 18px;
+      background: rgba(247,215,116,0.6);
+      transform: translateX(-50%);
+    }
+    .balloon:nth-child(1){ background: var(--sky); animation-delay: 0s;}
+    .balloon:nth-child(1)::before{ color: var(--sky); animation-delay: 0s;}
+
+    .balloon:nth-child(2){ background: var(--lemon); animation-delay: .35s;}
+    .balloon:nth-child(2)::before{ color: var(--lemon); animation-delay: .35s;}
+
+    .balloon:nth-child(3){ background: var(--apricot); animation-delay: .7s;}
+    .balloon:nth-child(3)::before{ color: var(--apricot); animation-delay: .7s;}
+
+    .balloon:nth-child(4){ background: var(--coral); animation-delay: 1.05s;}
+    .balloon:nth-child(4)::before{ color: var(--coral); animation-delay: 1.05s;}
+
+    .balloon:nth-child(5){ background: rgba(180,140,255,0.85); animation-delay: 1.4s;}
+    .balloon:nth-child(5)::before{ color: rgba(180,140,255, 1); animation-delay: 1.4s;}
+
+
+    @keyframes float{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-10px); }
+    }
+
+    /* ====== INSIDE LEFT PAGE ====== */
+    .page{
+      padding: 22px 20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 14px;
+    }
+
+    .page h2{
+      font-size: 18px;
+      color: var(--lemon);
+      letter-spacing: 0.08em;
+    }
+
+    .message{
+      color: rgba(247,215,116,0.95);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .message p{ margin-bottom: 10px; }
+
+    .signature{
+      margin-top: 8px;
+      color: var(--sky);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ====== INSIDE RIGHT PAGE (CAKE) ====== */
+    .cake-area{
+      position: relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 22px 16px 18px;
+    }
+
+    /* slightly more detailed “ms paint but cared” cake */
+    .cake-wrap{
+      position: relative;
+      width: min(330px, 92%);
+      height: 240px;
+    }
+
+    .cake{
+      position:absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 170px;
+      border-radius: 14px 14px 10px 10px;
+      background:
+        linear-gradient(180deg, rgba(74,37,17,0.92), rgba(45,22,7,0.96));
+      border: 3px solid rgba(0,0,0,0.55);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.25);
+      overflow:hidden;
+    }
+
+    .cake::before{ /* icing top */
+      content:"";
+      position:absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 56px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(247,215,116,0.40), transparent 45%),
+        linear-gradient(180deg, rgba(240,164,107,0.92), rgba(247,215,116,0.82));
+      border-bottom: 3px solid rgba(0,0,0,0.35);
+    }
+
+    .drips{
+      position:absolute;
+      left: 0;
+      right: 0;
+      top: 48px;
+      height: 44px;
+      pointer-events:none;
+      opacity: 0.95;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(240,164,107,0.9) 0 18px, transparent 19px),
+        radial-gradient(circle at 22% 0%, rgba(247,215,116,0.9) 0 16px, transparent 17px),
+        radial-gradient(circle at 40% 0%, rgba(240,164,107,0.9) 0 20px, transparent 21px),
+        radial-gradient(circle at 58% 0%, rgba(247,215,116,0.9) 0 15px, transparent 16px),
+        radial-gradient(circle at 72% 0%, rgba(240,164,107,0.9) 0 19px, transparent 20px),
+        radial-gradient(circle at 88% 0%, rgba(247,215,116,0.9) 0 17px, transparent 18px);
+      filter: drop-shadow(0 3px 0 rgba(0,0,0,0.25));
+    }
+
+    .sprinkles{
+      position:absolute;
+      left: 12px;
+      right: 12px;
+      top: 10px;
+      height: 34px;
+      background:
+        linear-gradient(90deg, transparent 0 8px, rgba(250,104,104,0.9) 8px 12px, transparent 12px 18px, rgba(90,156,181,0.9) 18px 22px, transparent 22px 30px, rgba(247,215,116,0.95) 30px 34px, transparent 34px 42px) repeat;
+      background-size: 48px 34px;
+      opacity: 0.95;
+      mix-blend-mode: screen;
+    }
+
+    .plate{
+      position:absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 110%;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(90,156,181,0.75), rgba(7,8,20,0.8));
+      border: 3px solid rgba(0,0,0,0.45);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.25);
+    }
+
+    /* ====== CANDLES ====== */
+    .candles{
+      position:absolute;
+      left: 50%;
+      top: -40px;   /* was 22px, but candles were too low. try 6px, then 0px, then -6px if needed */
+      transform: translateX(-50%);
+      width: 94%;
+      height: 110px;
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 8px;
+      align-items:end;
+      padding: 0 10px;
+    }
+
+    .candle{
+      position: relative;
+      height: 64px;
+      width: 16px;
+      margin: 0 auto;
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      /* bigger hitbox without changing visuals too much */
+     /*padding: 14px 10px;*/
+      transform: translateY(0px);
+    }
+    .candle::after{
+      content:"";
+      position:absolute;
+      inset: -10px; /* bigger hitbox , because we commented out the padding in .candle due to sinking candle*/
+    }
+    .candle::before{
+      content:"";
+      position:absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 10px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 999px;
+      opacity: 0.35;
+    }
+
+    .candle .body{
+      position:absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 52px;
+      border-radius: 4px;
+      background: linear-gradient(
+       180deg,
+       rgba(247,215,116,0.95),
+       rgba(240,164,107,0.95)
+      );
+      border: 2px solid rgba(0,0,0,0.4);
+    }
+
+    .candle .stripe{
+      position:absolute;
+      left: 2px; right: 2px;
+      bottom: 8px;
+      height: 4px;
+      background: rgba(250,104,104,0.9);
+      opacity: 0.65;
+      border-radius: 2px;
+    }
+
+    .flame{
+      position:absolute;
+      left: 50%;
+      top: -18px;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 18px;
+      background: radial-gradient(circle at 40% 35%, rgba(247,215,116,1), rgba(216,107,107,0.95));
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: 0 0 16px rgba(247,215,116,0.45);
+      transition: opacity 180ms ease;
+      pointer-events:none;
+      animation: flicker 1s infinite ease-in-out;
+    }
+    @keyframes flicker{
+      0%,100%{ transform: translateX(-50%) scale(1) rotate(-1deg); }
+      50%{ transform: translateX(-50%) scale(0.93) rotate(2deg); }
+    }
+
+    .out .flame{ opacity: 0; }
+
+    /* ====== CONTROLS ====== */
+    .controls{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn{
+      font-family: var(--mono);
+      cursor: pointer;
+      border: 2px solid rgba(0,0,0,0.55);
+      background: rgba(247,215,116,0.92);
+      color: rgba(7,8,20,0.95);
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: transform 120ms ease, filter 120ms ease;
+      user-select: none;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active{ transform: translateY(0px) scale(0.98); }
+
+    .celebrate{
+      background: rgba(240,164,107,0.95);
+      letter-spacing: 0.06em;
+      font-weight: 800;
+    }
+
+    /* Discreet matchbox reset */
+    .matchbox{
+      background: rgba(90,156,181,0.35);
+      color: rgba(247,215,116,0.95);
+      border: 1px solid rgba(247,215,116,0.35);
+      padding: 8px 10px;
+      border-radius: 10px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .matchbox .art{
+      font-size: 13px;
+      opacity: 0.95;
+      white-space: nowrap;
+    }
+    .matchbox .spark{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: transparent;
+      box-shadow: none;
+      transition: all 220ms ease;
+    }
+    .matchbox.lit .spark{
+      background: radial-gradient(circle, rgba(247,215,116,1), rgba(250,104,104,0.9));
+      box-shadow: 0 0 14px rgba(247,215,116,0.65);
+    }
+
+    /* ====== OPEN/CLOSE HOTSPOTS ====== */
+    .corner{
+      position: absolute;
+      bottom: 10px;
+      width: 92px;
+      height: 92px;
+      z-index: 50;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    .corner.left { left: 10px; }
+    .corner.right{ right: 10px; }
+
+    .corner::after{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 2px dashed rgba(247,215,116,0.35);
+      opacity: 0.35;
+      transition: opacity 160ms ease;
+    }
+    .corner:hover::after{ opacity: 0.6; }
+    .corner:active::after{ opacity: 0.75; }
+
+    /* small “page curl” hint */
+    .corner.left::before,
+    .corner.right::before{
+      content:"";
+      position:absolute;
+      bottom: 10px;
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle at 30% 30%, rgba(247,215,116,0.22), transparent 65%);
+      border-radius: 10px;
+      opacity: 0.55;
+    }
+    .corner.left::before{ left: 10px; transform: skewX(-8deg); }
+    .corner.right::before{ right: 10px; transform: skewX(8deg); }
+
+    /* ====== CONFETTI ====== */
+    .confetti{
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      z-index: 999;
+      border-radius: 2px;
+    }
+    @keyframes fall{
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+    
+    .pawprint{
+  position: fixed;
+  z-index: 1200;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 18px;
+  color: rgba(247,215,116,0.92);
+  text-shadow: 0 0 10px rgba(247,215,116,0.22);
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  transition: opacity 180ms ease, transform 2.2s ease;
+}
+
+.pawprint.show{
+  opacity: 1;
+}
+
+.pawprint.fade{
+  opacity: 0;
+}
+
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 720px){
+      .book{ height: 610px; }
+      .inside{ grid-template-columns: 1fr; }
+      .gutter{ display:none; }
+      .cake-wrap{ height: 260px; }
+      .corner{ width: 80px; height: 80px; }
+      .candles{ top: -20px; }
+      /*.candles{
+          transform: translateX(-50%) translateY(-12px);
+        } Have not attempted this commented code in lieu of (or in conjunction with) the line above .candles{ top: -20px; } for making the candles show at the correct heigh on mobile device screens
+      */
+    }
