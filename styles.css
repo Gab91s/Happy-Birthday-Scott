@@ -14,7 +14,7 @@
 }
 
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body{
   font-family: var(--mono);
@@ -64,6 +64,27 @@ body.stars-on::before{ opacity: 0.75; }
 @media (prefers-reduced-motion: reduce){
   body::before{ animation: none; }
 }
+
+    /* ====== Footer Styling ====== */
+.footer{
+  text-align: center;
+  font-size: 0.9em;
+  font-weight:400;
+  color: #555;
+  padding: 10px;
+  position: fixed;
+  bottom: 0px;
+  height: auto;
+  width: 100%;
+  z-index: 0;
+}
+.footer a,
+.footer a:visited {
+  color: inherit;
+  text-decoration: none; /* Optional: also removes the default underline */
+}
+.footer a:active,
+.footer a:hover {color: var(--sky)}
 
     /* ====== BOOK CARD ====== */
     .stage{
@@ -499,7 +520,7 @@ body.stars-on::before{ opacity: 0.75; }
       font-weight: 800;
     }
 
-    /* Discreet matchbox reset */
+    /* Matchbox reset */
     .matchbox{
       background: rgba(90,156,181,0.35);
       color: rgba(247,215,116,0.95);
@@ -581,8 +602,8 @@ body.stars-on::before{ opacity: 0.75; }
     @keyframes fall{
       to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
-    
-    .pawprint{
+
+  .pawprint{
   position: fixed;
   z-index: 1200;
   pointer-events: none;

@@ -5,10 +5,13 @@ const candlesEl = document.getElementById('candles');
 const resetBtn = document.getElementById('resetBtn');
 const celebrateBtn = document.getElementById('celebrateBtn');
 const audio = document.getElementById('birthdaySong');
+
 let isOpen = false;
 let candlesOutCount = 0;
 let celebrateLock = false;
+
 const confettiColors = ["#5A9CB5","#FACE68","#FAAC68","#FA6868","rgba(180,140,255,0.9)"];
+
 function safePlayAudio(){
   // Browsers require user gesture — opening the card counts.
   audio.play().catch(() => {});
@@ -17,6 +20,7 @@ function stopAudio(){
   audio.pause();
   audio.currentTime = 0;
 }
+
 function toggleOpen(){
   isOpen = !isOpen;
   book.classList.toggle('open', isOpen);
@@ -228,7 +232,7 @@ function dropPawTrail(){
     e.stopPropagation();
     celebrate();
     spawnPawTrail()
-    playCatSound(); // commented out because it didn't play the cat sounds. Maybe have been playing the regular happy bday mp3, didn't check why. 
+    playCatSound(); 
     spawnPawTrail();
   });
 // const pawBtn = document.getElementById('pawBtn'); // commenting out, changing to celebrateBtn for space on card

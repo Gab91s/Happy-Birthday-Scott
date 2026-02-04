@@ -1,0 +1,53 @@
+/* ====== GLOBAL STYLES ====== */
+:root{
+  --sky: #6d5bd0;     /* soft purple/indigo */
+  --lemon: #f7d774;   /* warm gold */
+  --apricot: #f0a46b; /* amber accent */
+  --coral: #d86b6b;   /* muted warm red (tiny use) */
+
+  --ink: #070814;
+  --paper: #0b0c1f;
+  --border: rgba(247, 215, 116, 0.88);
+  --glow: rgba(247, 215, 116, 0.35);
+
+  --mono: "Consolas", "Courier New", ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", monospace;
+}
+  
+  body
+  {
+  font-family: var(--mono);
+  color: var(--lemon);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: auto;
+  
+  background-color:
+    radial-gradient(circle at 18% 12%, rgba(109,91,208,0.18), transparent 42%),
+    radial-gradient(circle at 82% 20%, rgba(247,215,116,0.10), transparent 46%),
+    radial-gradient(circle at 70% 84%, rgba(240,164,107,0.08), transparent 40%),
+    linear-gradient(180deg, #050514, #02020a);
+  }
+  
+  
+    /* ====== Footer Styling ====== */
+.footer{
+  text-align: center;
+  font-size: 0.9em;
+  font-weight:400;
+  color: #555;
+  padding: 10px;
+  position: fixed;
+  bottom: 0px;
+  height: auto;
+  width: 100%;
+  z-index: 0;
+}
+.footer a,
+.footer a:visited {
+  color: inherit;
+  text-decoration: none; /* Optional: also removes the default underline */
+}
+.footer a:active,
+.footer a:hover {color: var(--sky)}
