@@ -28,7 +28,12 @@ function toggleOpen(){
   if (isOpen) safePlayAudio();
   else stopAudio();
 }
-cornerLeft.addEventListener('click', (e) => { e.stopPropagation(); toggleOpen(); });
+
+function toggleCat(){
+  document.body.classList.toggle('cat-on', isOpen);
+}
+
+cornerLeft.addEventListener('click', (e) => { e.stopPropagation(); toggleCat(); });
 cornerRight.addEventListener('click', (e) => { e.stopPropagation(); toggleOpen(); });
 function makeCandle({ digitText = null } = {}){
   const c = document.createElement('div');

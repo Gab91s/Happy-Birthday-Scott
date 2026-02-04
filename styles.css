@@ -624,6 +624,72 @@ body.stars-on::before{ opacity: 0.75; }
   opacity: 0;
 }
 
+/* --- Walking cat sprite --- */
+.walking-cat{
+  position: fixed;
+  bottom: 500px;              /* tweak: how low on the page */
+  left: -60px;               /* start off-screen */
+  width: 48px;               /* one frame width */
+  height: 48px;              /* one frame height */
+  background: url("/Walk.png") 0 0 / 288px 48px no-repeat; /* 6 frames */
+  pointer-events: none;
+  z-index: 2000;
+
+  /* Optional: crisp pixel vibe (remove if you want smooth) */
+  image-rendering: pixelated;
+  
+  .walking-cat{ opacity: 0; transition: opacity 250ms ease; }
+body.cat-on .walking-cat{ opacity: 1; }
+
+
+  /* Two animations at once:
+     1) sprite frames
+     2) movement across the screen
+  */
+  /* animation:
+    cat-frames 0.75s steps(6) infinite,
+    cat-stroll 10s linear infinite,
+    cat-bob 1.2s ease-in-out infinite; */
+}
+
+@keyframes cat-frames{
+  from { background-position: 0 0; }
+  to   { background-position: -288px 0; } /* 6 frames * 48px */
+}
+
+/* @keyframes cat-stroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(100vw + 120px)); }
+} */
+
+.walking-cat{
+  animation:
+    cat-frames 0.75s steps(6) infinite,
+    cat-patrol 25s linear infinite,
+    cat-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes cat-patrol{
+  0%   { transform: translateX(0) scaleX(1); }
+  49%  { transform: translateX(calc(100vw + 120px)) scaleX(1); }
+  50%  { transform: translateX(calc(100vw + 120px)) scaleX(-1); }
+  99%  { transform: translateX(0) scaleX(-1); }
+  100% { transform: translateX(0) scaleX(1); }
+}
+
+
+
+/* tiny up-down bob so it feels less robotic */
+@keyframes cat-bob{
+  0%,100% { margin-bottom: 0; }
+  50%     { margin-bottom: 2px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .walking-cat{ animation: none; }
+}
+
 
     /* ====== RESPONSIVE ====== */
     @media (max-width: 720px){
